@@ -1216,8 +1216,8 @@
         <devicelayout auto-generated='true' name='Phone'>
           <size maxheight='2200' minheight='2200' sizing-mode='vscroll' />
           <zones>
-            <zone h='100000' id='24' type-v2='layout-basic' w='100000' x='0' y='0'>
-              <zone h='98120' id='23' param='vert' type-v2='layout-flow' w='99034' x='483' y='940'>
+            <zone h='100000' id='26' type-v2='layout-basic' w='100000' x='0' y='0'>
+              <zone h='98120' id='25' param='vert' type-v2='layout-flow' w='99034' x='483' y='940'>
                 <zone fixed-size='43' h='5405' id='17' is-fixed='true' name=' Dashboard' w='44478' x='23476' y='2585'>
                   <zone-style>
                     <format attr='border-color' value='#000000' />
@@ -1505,7 +1505,7 @@
       </viewpoint>
       <simple-id uuid='{FF360A2F-4E80-4B5C-A5A1-FE3614CBB267}' />
     </window>
-    <window class='worksheet' name='Analysis of Orders Across Company Type and Meal Type' tab-color='#f66273'>
+    <window class='worksheet' maximized='true' name='Analysis of Orders Across Company Type and Meal Type' tab-color='#f66273'>
       <cards>
         <edge name='left'>
           <strip size='160'>
@@ -1676,7 +1676,7 @@
       </cards>
       <simple-id uuid='{691CAD41-6441-4427-987D-3B2BC3D54A97}' />
     </window>
-    <window class='dashboard' maximized='true' name='Dashboard 1'>
+    <window class='dashboard' name='Dashboard 1'>
       <viewpoints>
         <viewpoint name=' Dashboard' />
         <viewpoint name=' Flavors Across Cities'>
@@ -1712,6 +1712,16 @@
         </viewpoint>
         <viewpoint name='Revenue Contribution by Meal Type'>
           <zoom type='entire-view' />
+          <selection-collection>
+            <node-selection select-tuples='false'>
+              <oriented-node-reference orientation='vertical'>
+                <node-reference>
+                  <axis>[federated.01qb80d0kdh8ol16pd6ow1i75taf].[sum:order_value:qk]</axis>
+                </node-reference>
+                <page-reference />
+              </oriented-node-reference>
+            </node-selection>
+          </selection-collection>
         </viewpoint>
       </viewpoints>
       <active id='5' />
