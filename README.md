@@ -149,7 +149,7 @@ The story continues by analyzing company types, meal preferences, customer satis
 - Popular cuisines differ across cities.
 - Certain meal types contribute significantly more revenue.
 - Younger customers order more frequently.
-- Customer ratings vary by meal category.
+- Customer ratings  by meal category.
 - Delivery performance impacts customer satisfaction.
 - Some cities contribute substantially higher order volumes.
 
