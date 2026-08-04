@@ -1,12 +1,12 @@
-# 🍽️ Food Ordering Behavior Analysis Dashboard
+# Food Ordering Behavior Analysis Dashboard
 
-## 📌 Project Overview
+##  Project Overview
 
 The **Food Ordering Behavior Analysis Dashboard** is an interactive Tableau project designed to analyze customer food ordering patterns, cuisine preferences, restaurant performance, delivery efficiency, and revenue trends. The dashboard transforms raw food ordering data into meaningful business insights, helping restaurants and food delivery platforms make data-driven decisions.
 
 ---
 
-## 🎯 Objectives
+##  Objectives
 
 - Analyze customer ordering behavior.
 - Identify the most popular cuisines and meal types.
@@ -17,7 +17,7 @@ The **Food Ordering Behavior Analysis Dashboard** is an interactive Tableau proj
 
 ---
 
-## 🛠️ Tools & Technologies
+## Tools & Technologies
 
 - Tableau Desktop / Tableau Public
 - Microsoft Excel / CSV Dataset
@@ -25,7 +25,7 @@ The **Food Ordering Behavior Analysis Dashboard** is an interactive Tableau proj
 
 ---
 
-## 📂 Dataset
+##  Dataset
 
 **Dataset:** Food Ordering Behavior Dataset
 
@@ -59,7 +59,7 @@ The dashboard provides a comprehensive overview of customer ordering trends, cui
 
 ## Dashboard Components
 
-### 1️⃣ KPI Cards
+### 1️ KPI Cards
 **Cuisine Demand & Order Performance Metrics**
 
 Displays:
@@ -68,67 +68,66 @@ Displays:
 - Total Revenue
 - Average Customer Rating
 - Average Delivery Time
-- Most Popular Cuisine
 
 ---
 
-### 2️⃣ Heat Map
+### 2️ Heat Map
 **Flavors Across Cities by Cuisine Type**
 
 Shows cuisine popularity across different cities to identify regional customer preferences.
 
 ---
 
-### 3️⃣ Grouped Bar Chart
+### 3️ Grouped Bar Chart
 **Order Distribution by Age Group and Restaurant Segment**
 
 Compares ordering patterns across different customer age groups and restaurant categories.
 
 ---
 
-### 4️⃣ Bar Chart
+###  Bar Chart
 **Analysis of Orders Across Company Type and Meal Type**
 
 Displays order volume by company type and meal category.
 
 ---
 
-### 5️⃣ Donut Chart
+###  Donut Chart
 **Customer Rating Analysis by Meal Type**
 
 Shows customer satisfaction levels for each meal type.
 
 ---
 
-### 6️⃣ Bar Chart
+###  Bar Chart
 **Revenue Contribution by Meal Type**
 
 Highlights which meal types generate the highest revenue.
 
 ---
 
-### 7️⃣ Pie Chart
+###  Pie Chart
 **Distribution of Customer Preferences Across Cuisines**
 
 Visualizes the percentage share of each cuisine based on customer orders.
 
 ---
 
-### 8️⃣ Bar Chart
+###  Bar Chart
 **Cities by Order Volume**
 
 Ranks cities according to total number of food orders.
 
 ---
 
-### 9️⃣ Bar Chart
+###  Bar Chart
 **Distribution of Delivery Time Across Orders**
 
 Analyzes delivery time distribution to evaluate delivery efficiency.
 
 ---
 
-# 📖 Story
+#  Story
 
 ## Story Title
 
@@ -166,7 +165,7 @@ The story continues by analyzing company types, meal preferences, customer satis
 
 ---
 
-# 👨‍💻 Author
+#  Author
 
 **Chandan Gupta**
 
