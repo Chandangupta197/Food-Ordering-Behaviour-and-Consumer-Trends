@@ -1,180 +1,99 @@
-# Food Ordering Behavior Analysis Dashboard
+# Food Ordering Behaviour and Consumer Trends
 
-##  Project Overview
+A full-stack upgrade of the original food-ordering analytics project. The existing dataset and Tableau work are retained; this version adds a Flask web application, MySQL-backed user accounts, secure password hashing, session-based authentication, and an interactive analytics dashboard.
 
-The **Food Ordering Behavior Analysis Dashboard** is an interactive Tableau project designed to analyze customer food ordering patterns, cuisine preferences, restaurant performance, delivery efficiency, and revenue trends. The dashboard transforms raw food ordering data into meaningful business insights, helping restaurants and food delivery platforms make data-driven decisions.
+## Technology stack
 
----
+- **Frontend:** HTML, CSS, JavaScript, Chart.js
+- **Backend:** Python, Flask
+- **Database:** MySQL
+- **Data analysis:** pandas
+- **Authentication:** Werkzeug password hashing and Flask signed sessions
 
-##  Objectives
+## Features
 
-- Analyze customer ordering behavior.
-- Identify the most popular cuisines and meal types.
-- Understand customer demographics and preferences.
-- Evaluate restaurant performance across company types.
-- Monitor delivery performance.
-- Discover revenue-generating meal categories.
+- User registration and login
+- Passwords stored as hashes (never plaintext)
+- Login-protected dashboard and logout
+- Session cookie security settings configurable through environment variables
+- Dashboard KPIs and charts generated from the project CSV
+- Existing Tableau workbook, report, visualizations, and dataset remain part of the repository
 
----
+## Project structure
 
-## Tools & Technologies
+```
+app.py
+config.py
+requirements.txt
+.env.example
+schema.sql
+Data/
+  food_ordering_behavior_dataset.csv
+templates/
+  base.html
+  index.html
+  login.html
+  register.html
+  dashboard.html
+static/
+  css/style.css
+  js/dashboard.js
+```
 
-- Tableau Desktop / Tableau Public
-- Microsoft Excel / CSV Dataset
-- Git & GitHub
+## Setup (Windows)
 
----
+1. Install Python 3.10+ and MySQL Server.
+2. Clone this repository and open its folder in a terminal.
+3. Create and activate a virtual environment:
 
-##  Dataset
+   ```powershell
+   py -m venv .venv
+   .venv\\Scripts\\Activate.ps1
+   ```
 
-**Dataset:** Food Ordering Behavior Dataset
+4. Install packages:
 
-The dataset contains customer order information, including:
+   ```powershell
+   pip install -r requirements.txt
+   ```
 
-- Customer Age Group
-- City
-- Cuisine Type
-- Restaurant Segment
-- Company Type
-- Meal Type
-- Customer Rating
-- Delivery Time
-- Order Value
-- Revenue
-- Order Count
+5. Create a MySQL database and tables by running `schema.sql` in MySQL Workbench or the MySQL CLI.
+6. Copy `.env.example` to `.env` and set your local database credentials and a long random `SECRET_KEY`. Never commit `.env`.
+7. Start the app:
 
----
+   ```powershell
+   python app.py
+   ```
 
-# 📊 Dashboard
+8. Open http://127.0.0.1:5000 and create an account.
 
-## Dashboard Title
+## Configuration
 
-**Food Ordering Behavior Analysis Dashboard**
+The app reads these variables from `.env`:
 
-### Dashboard Description
+- `SECRET_KEY`: long, random Flask session signing key
+- `MYSQL_HOST`, `MYSQL_PORT`, `MYSQL_USER`, `MYSQL_PASSWORD`, `MYSQL_DATABASE`: MySQL connection settings
+- `DATASET_PATH`: optional path to the CSV (defaults to `Data/food_ordering_behavior_dataset.csv`)
+- `COOKIE_SECURE`: set to `true` only when deployed behind HTTPS
 
-The dashboard provides a comprehensive overview of customer ordering trends, cuisine popularity, restaurant performance, customer satisfaction, and delivery analysis through multiple interactive visualizations.
+## Authentication flow
 
----
+1. Registration validates the form and checks whether the email already exists.
+2. The password is hashed with Werkzeug's password-hashing helper before it is stored in MySQL.
+3. Login retrieves the user's hash and verifies the submitted password against it.
+4. On successful login, the Flask session stores the user's ID and email. The browser receives a signed session cookie; the password is not placed in the cookie.
+5. Protected routes use the login-required decorator. Logout clears the session.
 
-## Dashboard Components
+For production deployment, use HTTPS, a strong secret key, secure cookie settings, CSRF protection, rate limiting, and database credentials managed outside source control.
 
-### 1️ KPI Cards
-**Cuisine Demand & Order Performance Metrics**
+## Analytics
 
-Displays:
+The dashboard reads the existing CSV with pandas and computes summary metrics and chart data. It attempts to recognize common column names for cuisine, city, meal type, revenue/order value, rating, and delivery time. If a column in the dataset uses a different name, update the candidate lists in `app.py`.
 
-- Total Orders
-- Total Revenue
-- Average Customer Rating
-- Average Delivery Time
+## Existing project assets
 
----
+The original Tableau workbook, project report, visualizations, and source dataset are retained. The Flask dashboard is an additional application layer, not a replacement for the original analysis.
 
-### 2️ Heat Map
-**Flavors Across Cities by Cuisine Type**
+## Current status
 
-Shows cuisine popularity across different cities to identify regional customer preferences.
-
----
-
-### 3️ Grouped Bar Chart
-**Order Distribution by Age Group and Restaurant Segment**
-
-Compares ordering patterns across different customer age groups and restaurant categories.
-
----
-
-###  Bar Chart
-**Analysis of Orders Across Company Type and Meal Type**
-
-Displays order volume by company type and meal category.
-
----
-
-###  Donut Chart
-**Customer Rating Analysis by Meal Type**
-
-Shows customer satisfaction levels for each meal type.
-
----
-
-###  Bar Chart
-**Revenue Contribution by Meal Type**
-
-Highlights which meal types generate the highest revenue.
-
----
-
-###  Pie Chart
-**Distribution of Customer Preferences Across Cuisines**
-
-Visualizes the percentage share of each cuisine based on customer orders.
-
----
-
-###  Bar Chart
-**Cities by Order Volume**
-
-Ranks cities according to total number of food orders.
-
----
-
-###  Bar Chart
-**Distribution of Delivery Time Across Orders**
-
-Analyzes delivery time distribution to evaluate delivery efficiency.
-
----
-
-#  Story
-
-## Story Title
-
-**Understanding Food Ordering Trends Through Customer Behavior Analytics**
-
-### Story Overview
-
-This Tableau story walks through customer ordering behavior from multiple business perspectives.
-
-The story begins with an overview of key business metrics using KPI cards, followed by an analysis of cuisine popularity across cities. It then explores customer demographics by examining ordering patterns across age groups and restaurant segments.
-
-The story continues by analyzing company types, meal preferences, customer satisfaction ratings, and revenue generation. Finally, it concludes with geographical order distribution and delivery performance, providing actionable insights for restaurants and food delivery businesses.
-
----
-
-# 📈 Key Insights
-
-- Popular cuisines differ across cities.
-- Certain meal types contribute significantly more revenue.
-- Younger customers order more frequently.
-- Customer ratings  by meal category.
-- Delivery performance impacts customer satisfaction.
-- Some cities contribute substantially higher order volumes.
-
----
-
-# 🚀 Business Benefits
-
-- Improve customer satisfaction.
-- Optimize menu offerings.
-- Increase revenue.
-- Enhance delivery performance.
-- Understand regional customer preferences.
-- Support data-driven business decisions.
-
----
-
-#  Author
-
-**Chandan Gupta**
-
-B.Tech (Computer Science Engineering)
-
-Data Analytics with Tableau Project
-
----
-
-## ⭐ Repository
-
-If you found this project useful, feel free to ⭐ the repository.
+This is the initial full-stack foundation. Next development steps: verify the CSV's exact column names, add data-import/refresh controls, add analytics filters, write automated tests, and prepare deployment.
