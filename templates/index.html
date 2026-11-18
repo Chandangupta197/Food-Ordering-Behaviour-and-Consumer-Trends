@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Food Ordering Behaviour Analytics{% endblock %}
+{% block content %}
+<section class="hero">
+  <p class="eyebrow">CUSTOMER BEHAVIOUR • FOOD COMMERCE • ANALYTICS</p>
+  <h1>Understand what drives <span>food orders.</span></h1>
+  <p class="hero-copy">Explore customer preferences, cuisine demand, revenue patterns and delivery performance through one analytics application.</p>
+  <div class="actions">
+    <a class="button" href="{{ url_for('register') }}">Create account</a>
+    <a class="button secondary" href="{{ url_for('login') }}">Login</a>
+  </div>
+</section>
+<section class="feature-grid">
+  <article class="panel"><h3>Customer insights</h3><p>Explore ordering behaviour and cuisine preferences.</p></article>
+  <article class="panel"><h3>Business metrics</h3><p>Track order volume, revenue, ratings and delivery time.</p></article>
+  <article class="panel"><h3>Secure access</h3><p>Personal accounts protected by password hashing and sessions.</p></article>
+</section>
+{% endblock %}
