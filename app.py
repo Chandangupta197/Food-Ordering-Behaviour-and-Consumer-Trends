@@ -1,19 +1,51 @@
 import os
 import re
+import sqlite3
 from functools import wraps
 
 import pandas as pd
-from flask import Flask, flash, redirect, render_template, request, session, url_for
-from flask_mysqldb import MySQL
+from flask import Flask, flash, g, redirect, render_template, request, session, url_for
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from config import Config
 
 app = Flask(__name__)
 app.config.from_object(Config)
-mysql = MySQL(app)
 
-EMAIL_RE = re.compile(r"^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$")
+EMAIL_RE = re.compile(r"^[^\s@]+@[^\s@]+\.[^\s@]+$")
+
+
+def get_db():
+    if "db" not in g:
+        os.makedirs(os.path.dirname(app.config["DATABASE"]), exist_ok=True)
+        connection = sqlite3.connect(app.config["DATABASE"])
+        connection.row_factory = sqlite3.Row
+        g.db = connection
+    return g.db
+
+
+@app.teardown_appcontext
+def close_db(error=None):
+    db = g.pop("db", None)
+    if db is not None:
+        db.close()
+
+
+def init_db():
+    os.makedirs(os.path.dirname(app.config["DATABASE"]), exist_ok=True)
+    with sqlite3.connect(app.config["DATABASE"]) as connection:
+        connection.execute("""
+            CREATE TABLE IF NOT EXISTS users (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                email TEXT NOT NULL UNIQUE COLLATE NOCASE,
+                password_hash TEXT NOT NULL,
+                created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+
+
+init_db()
 
 
 def login_required(view):
@@ -33,6 +65,7 @@ def get_dataset():
     try:
         return pd.read_csv(path)
     except (OSError, pd.errors.ParserError, UnicodeDecodeError):
+        app.logger.exception("Could not read the food ordering dataset")
         return pd.DataFrame()
 
 
@@ -67,11 +100,11 @@ def dashboard_data():
     revenue_col = find_column(df, ["revenue", "order value", "amount", "total"])
     rating_col = find_column(df, ["customer rating", "rating", "ratings"])
     delivery_col = find_column(df, ["delivery time", "delivery_time", "delivery minutes"])
-    numeric = lambda col: pd.to_numeric(df[col], errors="coerce") if col else pd.Series(dtype=float)
 
-    revenue = numeric(revenue_col)
-    ratings = numeric(rating_col)
-    delivery = numeric(delivery_col)
+    def numeric(column):
+        return pd.to_numeric(df[column], errors="coerce") if column else pd.Series(dtype=float)
+
+    revenue, ratings, delivery = numeric(revenue_col), numeric(rating_col), numeric(delivery_col)
     return {
         "total_orders": int(len(df)),
         "total_revenue": round(float(revenue.sum()), 2) if revenue_col else 0,
@@ -103,26 +136,23 @@ def register():
         if len(password) < 8:
             flash("Password must contain at least 8 characters.", "danger")
             return render_template("register.html")
-        cur = mysql.connection.cursor()
+
+        db = get_db()
         try:
-            cur.execute("SELECT id FROM users WHERE email = %s", (email,))
-            if cur.fetchone():
-                flash("An account with this email already exists.", "warning")
-                return render_template("register.html")
-            password_hash = generate_password_hash(password)
-            cur.execute(
-                "INSERT INTO users (name, email, password_hash) VALUES (%s, %s, %s)",
-                (name, email, password_hash)
+            db.execute(
+                "INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)",
+                (name, email, generate_password_hash(password))
             )
-            mysql.connection.commit()
+            db.commit()
             flash("Account created. You can now log in.", "success")
             return redirect(url_for("login"))
-        except Exception:
-            mysql.connection.rollback()
+        except sqlite3.IntegrityError:
+            db.rollback()
+            flash("An account with this email already exists.", "warning")
+        except sqlite3.Error:
+            db.rollback()
             app.logger.exception("Registration failed")
             flash("Could not create the account. Check the database setup.", "danger")
-        finally:
-            cur.close()
     return render_template("register.html")
 
 
@@ -131,17 +161,16 @@ def login():
     if request.method == "POST":
         email = request.form.get("email", "").strip().lower()
         password = request.form.get("password", "")
-        cur = mysql.connection.cursor()
-        try:
-            cur.execute("SELECT id, name, email, password_hash FROM users WHERE email = %s", (email,))
-            user = cur.fetchone()
-        finally:
-            cur.close()
-        if user and check_password_hash(user[3], password):
+        user = get_db().execute(
+            "SELECT id, name, email, password_hash FROM users WHERE email = ?",
+            (email,)
+        ).fetchone()
+
+        if user and check_password_hash(user["password_hash"], password):
             session.clear()
-            session["user_id"] = user[0]
-            session["user_name"] = user[1]
-            session["user_email"] = user[2]
+            session["user_id"] = user["id"]
+            session["user_name"] = user["name"]
+            session["user_email"] = user["email"]
             return redirect(url_for("dashboard"))
         flash("Invalid email or password.", "danger")
     return render_template("login.html")
