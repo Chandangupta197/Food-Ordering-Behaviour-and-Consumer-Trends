@@ -1,11 +1,9 @@
-CREATE DATABASE IF NOT EXISTS food_ordering_db
-  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE food_ordering_db;
-
+-- SQLite schema for the Flask authentication layer.
+-- The application creates this table automatically when app.py starts.
 CREATE TABLE IF NOT EXISTS users (
-    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    email VARCHAR(190) NOT NULL UNIQUE,
-    password_hash VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    email TEXT NOT NULL UNIQUE COLLATE NOCASE,
+    password_hash TEXT NOT NULL,
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
