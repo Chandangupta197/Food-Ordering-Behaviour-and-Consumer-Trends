@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Create account{% endblock %}
+{% block content %}
+<section class="auth-card">
+  <p class="eyebrow">JOIN FOODINSIGHTS</p><h1>Create account</h1>
+  <form method="post" class="form">
+    <label>Full name<input type="text" name="name" maxlength="100" required autocomplete="name"></label>
+    <label>Email<input type="email" name="email" required autocomplete="email"></label>
+    <label>Password<input type="password" name="password" minlength="8" required autocomplete="new-password"><small>Use at least 8 characters.</small></label>
+    <button class="button full" type="submit">Create account</button>
+  </form>
+  <p class="muted">Already registered? <a href="{{ url_for('login') }}">Login</a></p>
+</section>
+{% endblock %}
