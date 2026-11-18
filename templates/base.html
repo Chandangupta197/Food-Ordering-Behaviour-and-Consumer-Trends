@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Food Ordering Insights{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="{{ url_for('index') }}">Food<span>Insights</span></a>
+    <nav>
+      {% if session.get('user_id') %}
+        <span class="welcome">Hi, {{ session.get('user_name') }}</span>
+        <form method="post" action="{{ url_for('logout') }}"><button class="nav-button" type="submit">Logout</button></form>
+      {% else %}
+        <a href="{{ url_for('login') }}">Login</a>
+        <a class="nav-cta" href="{{ url_for('register') }}">Sign up</a>
+      {% endif %}
+    </nav>
+  </header>
+  <main class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="flash {{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+  {% block scripts %}{% endblock %}
+</body>
+</html>
