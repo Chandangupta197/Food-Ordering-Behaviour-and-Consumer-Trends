@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Analytics Dashboard{% endblock %}
+{% block content %}
+<div class="dashboard-heading"><div><p class="eyebrow">FOOD ORDERING ANALYTICS</p><h1>Dashboard overview</h1><p class="muted">A snapshot of the dataset currently connected to this application.</p></div></div>
+{% if metrics.dataset_warning %}<div class="flash warning">{{ metrics.dataset_warning }}</div>{% endif %}
+<section class="kpi-grid">
+  <article class="kpi"><span>Total orders</span><strong>{{ "{:,}".format(metrics.total_orders) }}</strong></article>
+  <article class="kpi"><span>Total revenue / value</span><strong>{{ "{:,.2f}".format(metrics.total_revenue) }}</strong></article>
+  <article class="kpi"><span>Average rating</span><strong>{{ metrics.avg_rating if metrics.avg_rating is not none else "—" }}</strong></article>
+  <article class="kpi"><span>Average delivery time</span><strong>{{ metrics.avg_delivery if metrics.avg_delivery is not none else "—" }}</strong></article>
+</section>
+<section class="charts-grid">
+  <article class="panel chart-panel"><h2>Orders by cuisine</h2><canvas id="cuisineChart"></canvas></article>
+  <article class="panel chart-panel"><h2>Orders by city</h2><canvas id="cityChart"></canvas></article>
+  <article class="panel chart-panel"><h2>Orders by meal type</h2><canvas id="mealChart"></canvas></article>
+</section>
+<script id="chart-data" type="application/json">{{ {"cuisine": metrics.cuisine, "city": metrics.city, "meal": metrics.meal}|tojson }}</script>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>{% endblock %}
